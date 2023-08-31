@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom CSS for dashboard */
+        .dashboard {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard h1 {
+            color: #343a40;
+            font-weight: bold;
+        }
+
+        .card {
+            border: none;
+            margin-bottom: 20px;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="dashboard">
+            <h1 class="mb-4">Verification Successful</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Your Details</h2>
+                            <p class="card-text">Name: {{ session.user_details.name }}</p>
+                            <p class="card-text">Email: {{ session.user_details.email }}</p>
+                            <p class="card-text">Phone: {{ session.user_details.phone }}</p>
+                            <p class="card-text">Address: {{ session.user_details.address }}</p>
+                            <p class="card-text">Age: {{ session.user_details.age }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title">Your Location</h2>
+                            <div id="location"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Bootstrap JS and popper.js scripts at the end of the body -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function getUserLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    var latitude = position.coords.latitude;
+                    var longitude = position.coords.longitude;
+                    var locationDiv = document.getElementById("location");
+                    locationDiv.innerHTML = "<p>Latitude: " + latitude + ", Longitude: " + longitude + "</p>";
+                }, function(error) {
+                    console.error("Error getting location:", error.message);
+                });
+            } else {
+                console.log("Geolocation is not available in this browser.");
+            }
+        }
+
+        getUserLocation();
+    </script>
+</body>
+</html>

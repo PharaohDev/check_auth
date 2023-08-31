@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Registration Successful</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .mb-4 {
+            color: #343a40;
+            font-weight: bold;
+        }
+        .alert-primary {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Registration Successful</h1>
+        <p>Your registration is complete. Here's your QR code:</p>
+        <img src="data:image/png;base64,{{ img_base64 }}" alt="QR Code" class="img-fluid">
+    </div>
+
+    <div class="container mt-3">
+        <div class="alert alert-primary" role="alert">
+            Enter the OTP from the Authenticator App below:
+        </div>
+        <div class="form-group">
+            <label for="userOTP">OTP:</label>
+            <input type="text" class="form-control" id="userOTP" required>
+        </div>
+        <button type="button" class="btn btn-primary" id="verifyOTP">Verify OTP</button>
+    </div>
+
+    <script>
+        document.getElementById("verifyOTP").addEventListener("click", function() {
+            var userOTP = document.getElementById("userOTP").value;
+            var secretKey = '{{ secret_key }}';
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/verify_otp?secret_key=' + encodeURIComponent(secretKey), true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    if (xhr.responseText === 'success') {
+                        window.location.href = '/success_page';
+                    } else {
+                        alert("OTP verification failed.");
+                    }
+                }
+            };
+            xhr.send('otp=' + encodeURIComponent(userOTP));
+        });
+    </script>
+</body>
+</html>
